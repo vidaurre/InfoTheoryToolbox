@@ -1,4 +1,4 @@
-function [NWords, PWords, Words, Seq] = getWordsDistr (Gamma,T,tau,L,shift)
+function [NWords, PWords, Words, Seq] = getWordsDistr (Gamma,T,tau,L,shift,ordering)
 % Computes histograms of words 
 %
 % INPUTS:
@@ -7,6 +7,8 @@ function [NWords, PWords, Words, Seq] = getWordsDistr (Gamma,T,tau,L,shift)
 % tau: the length of the bins
 % L: the lengths of the words to be considered (in no. of bins)
 % shift: how many time points we shift the window to get each successive word 
+% order: if 1, the histogram and probabilities will be ordered from highest
+%           to lowest occurrence (default 1)
 %           
 % OUTPUTS:
 % NWords: Histogram of words
@@ -18,6 +20,8 @@ function [NWords, PWords, Words, Seq] = getWordsDistr (Gamma,T,tau,L,shift)
 
 
 if nargin<5, shift = 1; end
+if nargin<5, ordering = 1; end
+
 
 Words = []; 
 NWords = []; 
@@ -38,8 +42,10 @@ for in = 1:length(T)
         end
     end
 end
-[NWords,I] = sort(NWords,'descend');
-Words = Words(I,:);
+if ordering==1
+    [NWords,I] = sort(NWords,'descend');
+    Words = Words(I,:);
+end
 PWords = NWords / sum(NWords);
 
 end
