@@ -18,8 +18,8 @@ if nargin<3,
 end
 word = zeros(1,length(bins));
 for j = 1:length(bins)
-    if size(gamma,1)==1, 
-        w = gamma;
+    if size(gamma(bins(j):bins(j)+tau-1,:),1)==1  
+        w = gamma(bins(j):bins(j)+tau-1,:);
     else
         w = sum(gamma(bins(j):bins(j)+tau-1,:));
     end

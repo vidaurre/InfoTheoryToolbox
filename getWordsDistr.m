@@ -1,4 +1,4 @@
-function [NWords, PWords, Words, Seq] = getWordsDistr (Gamma,T,tau,L,shift,ordering)
+function [NWords, PWords, Words, Seq] = getWordsDistr(Gamma,T,tau,L,shift,ordering,Words)
 % Computes histograms of words 
 %
 % INPUTS:
@@ -9,6 +9,8 @@ function [NWords, PWords, Words, Seq] = getWordsDistr (Gamma,T,tau,L,shift,order
 % shift: how many time points we shift the window to get each successive word 
 % order: if 1, the histogram and probabilities will be ordered from highest
 %           to lowest occurrence (default 1)
+% Words: matrix of words, with one row per word 
+%       (words not present in Words will be appended at the end)
 %           
 % OUTPUTS:
 % NWords: Histogram of words
@@ -19,12 +21,14 @@ function [NWords, PWords, Words, Seq] = getWordsDistr (Gamma,T,tau,L,shift,order
 % Author: Diego Vidaurre, OHBA, University of Oxford
 
 
-if nargin<5, shift = 1; end
-if nargin<5, ordering = 1; end
+if nargin<5 || isempty(shift), shift = 1; end
+if nargin<6 || isempty(ordering), ordering = 1; end
+if nargin<7 || isempty(Words), 
+    Words = []; NWords = []; 
+else
+    NWords = zeros(1,size(Words,1));
+end
 
-
-Words = []; 
-NWords = []; 
 Seq = [];
 bins = 1:tau:tau*L;
 for in = 1:length(T)
@@ -49,8 +53,6 @@ end
 PWords = NWords / sum(NWords);
 
 end
-
-
 
 %function r = cartesianProd(p,q)
 %[X,Y] = meshgrid(p,q);
