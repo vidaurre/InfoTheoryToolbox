@@ -7,7 +7,7 @@ function [NWords, PWords, Words, Seq] = getWordsDistr(Gamma,T,tau,L,shift,orderi
 % tau: the length of the bins
 % L: the lengths of the words to be considered (in no. of bins)
 % shift: how many time points we shift the window to get each successive word 
-% order: if 1, the histogram and probabilities will be ordered from highest
+% ordering: if 1, the histogram and probabilities will be ordered from highest
 %           to lowest occurrence (default 1)
 % Words: matrix of words, with one row per word 
 %       (words not present in Words will be appended at the end)
