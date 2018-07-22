@@ -1,4 +1,4 @@
-function [NWords, PWords, Words, Seq] = getWordsDistr(Gamma,T,tau,L,shift,ordering,Words)
+function [NWords, PWords, Words, Seq] = getWordsDistr(Gamma,T,tau,L,shift,ordering,Words,no_repeat)
 % Computes histograms of words 
 %
 % INPUTS:
@@ -28,13 +28,19 @@ if nargin<7 || isempty(Words),
 else
     NWords = zeros(1,size(Words,1));
 end
+if nargin<8, no_repeat = (L>1); end
 
 Seq = [];
 bins = 1:tau:tau*L;
 for in = 1:length(T)
     ini = sum(T(1:in-1));
+    tmp = 0;
     for t = ini+1:shift:ini+T(in)-tau*L+1
         word = getWord(Gamma(t:t+tau*L-1,:),bins,tau);
+        if no_repeat && length(unique(word))==1 
+            tmp = tmp + 1;
+            continue; 
+        end
         pos = WordPosition(Words,word);
         if isempty(pos)
             Words = [Words; word];
@@ -45,6 +51,7 @@ for in = 1:length(T)
             Seq = [Seq; pos];
         end
     end
+    [length(ini+1:shift:ini+T(in)-tau*L+1) tmp]
 end
 if ordering==1
     [NWords,I] = sort(NWords,'descend');

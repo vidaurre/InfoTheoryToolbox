@@ -45,6 +45,9 @@ for i = find(~seen)'
     P = [P; [realmin P2(i)]];
 end
 
+P(P<eps) = eps; 
+P = P ./ repmat(sum(P),size(P,1),1);
+
 KL = P(:,1) .* log(P(:,1) ./ P(:,2));
 [KL,I] = sort(KL,'descend');
 Words = Words(I,:);
